@@ -1,0 +1,63 @@
+2023-11-14 22:19:33.069 | INFO     | app:hello:22 - {
+  "message": {
+    "chat": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "type": "private",
+      "username": "Amjadali_eth"
+    },
+    "date": 1699978797,
+    "from": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "is_bot": false,
+      "language_code": "en",
+      "username": "Amjadali_eth"
+    },
+    "message_id": 6,
+    "text": "Hii"
+  },
+  "update_id": 83998760
+}
+2023-11-14 22:19:47.087 | INFO     | app:hello:22 - {
+  "message": {
+    "chat": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "type": "private",
+      "username": "Amjadali_eth"
+    },
+    "date": 1699978797,
+    "from": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "is_bot": false,
+      "language_code": "en",
+      "username": "Amjadali_eth"
+    },
+    "message_id": 6,
+    "text": "Hii"
+  },
+  "update_id": 83998760
+}
+2023-11-14 22:20:26.136 | INFO     | app:hello:22 - {
+  "message": {
+    "chat": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "type": "private",
+      "username": "Amjadali_et"
+    },
+    "date": 1699978797,
+    "from": {
+      "first_name": "Amjad",
+      "id": 961466332,
+      "is_bot": false,
+      "language_code": "en",
+      "username": "Amjadali_eth"
+    },
+    "message_id": 6,
+    "text": "Hii"
+  },
+  "update_id": 83998760
+}
