@@ -13,7 +13,7 @@ logger.add("flask_app.log", level="DEBUG")
 @app.route('/hello', methods=['POST'])
 def hello():
     data = request.get_json()
-    logger.info(data)
+    logger.info(json.dumps(data, indent=2))  # Convert data to JSON format for logging
     url = "https://api.particle.io/v1/devices/events?access_token=6150bed281fa3139051d52f44f4cade23b93dbdc"
     if not data: 
         return "telegram bot error",201
