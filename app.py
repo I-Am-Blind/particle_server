@@ -36,7 +36,7 @@ def hello():
     url = f"https://api.particle.io/v1/devices/events?access_token={tokens[user]['token']}"
     
     payload = json.dumps({
-    "name": tokens['user']['eventname'],
+    "name": tokens[user]['eventname'],
     "data": f"{data['message']['text']}"
     })
     headers = {
