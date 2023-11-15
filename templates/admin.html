@@ -1,0 +1,37 @@
+<!-- successful.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="font-inter flex  justify-center min-h-screen bg-white">
+    <div class="m-4">
+        <table class="min-w-full bg-white border border-gray-300 shadow-lg rounded-md overflow-hidden">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Telegram Bot ID</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Access Token</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Event Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in data.values() %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">
+                            {{ value.bot_id }}
+                        </td>
+                        <td class="py-2 px-4 border-b">
+                            {{ value.access_token }}
+                        </td>
+                        <td class="py-2 px-4 border-b">
+                            {{ value.event_name }}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

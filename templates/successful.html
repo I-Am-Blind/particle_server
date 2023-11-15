@@ -6,19 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Successful Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="font-inter flex items-center justify-center min-h-screen bg-gray-100">
     <div class="text-center">
         <h2 class="text-black text-3xl font-bold mb-4">Registration Successful!</h2>
         <p class="text-gray-600">
-            <span class="font-semibold">User:</span> {{ user }}<br>
-            <span class="font-semibold">Access Token:</span> {{ token }}<br>
-            <span class="font-semibold">Event Name:</span> {{ eventname }}
+            <span class="font-semibold">Telegram Bot ID:</span> {{ data.bot_id }}<br>
+            <span class="font-semibold">Access Token:</span> {{ data.access_token }}<br>
+            <span class="font-semibold">Event Name:</span> {{ data.event_name }}
         </p>
-        <p class="mt-4 text-gray-700">Thank you for registering!</p>
+        <p class="mt-4 text-gray-700">Your Webhook has been set successfully!</p>
     </div>
 </body>
 </html>
