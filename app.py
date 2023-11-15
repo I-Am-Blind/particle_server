@@ -69,7 +69,13 @@ def registerPost():
         tokens[user] = {'token': token , 'eventname': eventname}
         return render_template('successful.html', user=user, token=token, eventname=eventname),200
     return ({"error": "Invalid form data"}), 400
-   
+
+@app.route('/debug')
+def debug():
+    if tokens:
+        return render_template('debug.html', tokens = tokens),200
+    return ({"error": "Invalid form data"}), 400
+  
 if __name__ == '__main__':
     app.run()
 

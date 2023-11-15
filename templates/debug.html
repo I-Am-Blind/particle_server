@@ -1,0 +1,35 @@
+<!-- successful.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter flex items-center justify-center min-h-screen bg-white">
+    <div class="text-center">
+        <table class="min-w-full bg-white border border-gray-300 shadow-lg rounded-md overflow-hidden">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Telegram User ID</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Event Name</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Particle Argon Access Token</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for userId, data in tokens.items() %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ userId }}</td>
+                        <td class="py-2 px-4 border-b">{{ data.eventname }}</td>
+                        <td class="py-2 px-4 border-b">{{ data.token }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
