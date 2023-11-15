@@ -12,15 +12,20 @@
         <table class="min-w-full bg-white border border-gray-300 shadow-lg rounded-md overflow-hidden">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 bg-gray-100 border-b">Success</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b"></th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Team Name</th>
                     <th class="py-2 px-4 bg-gray-100 border-b">Telegram Bot ID</th>
                     <th class="py-2 px-4 bg-gray-100 border-b">Event Name</th>
                     <th class="py-2 px-4 bg-gray-100 border-b">Log</th>
                 </tr>
             </thead>
             <tbody>
+                {% set index = 1 %}
                 {% for  data in logs %}
                     <tr>
+                        <td class="py-2 px-4 border-b font-bold">
+                            {{ index }}
+                        </td>
                         <td class="py-2 px-4 border-b
                             {% if data.success == 'none' %}
                                 text-gray-500
@@ -30,7 +35,7 @@
                                 text-red-700
                             {% endif %}
                         ">
-                            {{ data.success }}
+                            {{ data.team_name }}
                         </td>
                         
                         <td class="py-2 px-4 border-b
@@ -65,6 +70,7 @@
                         {% endif %}
                     ">{{ data.log }}</td>
                     </tr>
+                    {% set index = index + 1 %}
                 {% endfor %}
             </tbody>
         </table>

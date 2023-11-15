@@ -29,6 +29,7 @@ def login():
 
 @app.route('/register', methods=['POST'])
 def registerPost():
+    team_name = request.form.get('team_name')
     bot_id = request.form.get('bot_id')
     client_id = request.form.get('client_id')
     client_secret = request.form.get('client_secret')
@@ -42,11 +43,9 @@ def registerPost():
         response_data = response.json()
         if response.status_code == 200:
            webhook_url = f"https://api.telegram.org/bot{bot_id}/setWebhook?url=https://particle-api-d8i53.ondigitalocean.app/{bot_id}/{response_data.get('access_token')}/{eventname}"
-           payload = {}
-           headers = {}
-           response = requests.request("POST", webhook_url, headers=headers, data=payload)
+           response = requests.request("POST", webhook_url, headers={}, data={})
            if response.status_code == 200:
-               all_data[bot_id] = {'bot_id': bot_id ,'access_token':response_data.get('access_token'),'event_name':eventname}
+               all_data[bot_id] = {'bot_id': bot_id ,'access_token':response_data.get('access_token'),'event_name':eventname , 'team_name': team_name}
                return render_template('successful.html', data=all_data[bot_id])
            return render_template('error.html',error = "Telegram Bot setWebhook API Error!" ,sub = f"Please verify Telegram Bot ID : {bot_id}")
         return render_template('error.html',error = "Particle AuthToken Generation error!" , sub = f"Please verify the following :<br>Client ID : {client_id}<br>Client Secret : {client_secret}")       
@@ -57,7 +56,7 @@ def registerPost():
 def update(botid,accesstoken,eventname):
     data = request.get_json()
     if data:
-        logs.append({'success': 'none' , 'botid': botid ,'eventname': eventname, 'log' : f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]}'})
+        logs.append({'success': 'none' ,'team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname, 'log' : f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]}'})
     if data['message']['from']['is_bot']:
         return "ok",200
     url = f"https://api.particle.io/v1/devices/events?access_token={accesstoken}"
@@ -72,13 +71,13 @@ def update(botid,accesstoken,eventname):
     try:
         response = requests.request("POST", url, headers=headers, data=payload)
         if response.status_code != 200:
-            logs.append({'success' : 'false' , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
+            logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
             return "Invalid access token",400
     except Exception as error:
-        logs.append({'success' : 'false' , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
+        logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
         return f'Error in request to particle device', 400
     
-    logs.append({'success':'true' ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]} was sent to particle device with access token {accesstoken}'})
+    logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]} was sent to particle device with access token {accesstoken}'})
     return 'Data successfully sent to particle device',200
 
 
