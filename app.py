@@ -2,7 +2,7 @@ import requests
 from loguru import logger 
 from flask import Flask, request, json ,render_template
 from flask_cors import CORS
-from config import tokens
+from config import logs
 from flask_talisman import Talisman
 
 app = Flask(__name__)
@@ -24,57 +24,40 @@ talisman = Talisman(
     force_https=False,  # Set to True if you want to force HTTPS
 )
 
-@app.route('/hello', methods=['POST'])
-def hello():
+@app.route('/<botid>/<accesstoken>/<eventname>',methods=['POST'])
+def update(botid,accesstoken,eventname):
     data = request.get_json()
-    if not data: 
-        return "telegram bot error",400
-    user = data['message']['from'].get('username')
-    if user not in tokens:
-        return "User not registered . Please register with username and access token",201
-    logger.info(json.dumps(data, indent=2))
-    url = f"https://api.particle.io/v1/devices/events?access_token={tokens[user]['token']}"
-    
+    if data:
+        logs.append({'success': 'none' , 'botid': botid ,'eventname': eventname, 'log' : f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]}'})
+    if data['message']['from']['is_bot']:
+        return "ok",200
+    url = f"https://api.particle.io/v1/devices/events?access_token={accesstoken}"
     payload = json.dumps({
-    "name": tokens[user]['eventname'],
+    "name": eventname,
     "data": f"{data['message']['text']}"
     })
     headers = {
    'Content-Type': 'application/json'
      }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
-    return "hello", 200
+    try:
+        response = requests.request("POST", url, headers=headers, data=payload)
+        if response.status_code != 200:
+            logs.append({'success' : 'false' , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
+            return "Invalid access token",400
+    except Exception as error:
+        logs.append({'success' : 'false' , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
+        return f'Error in request to particle device', 400
+    
+    logs.append({'success':'true' ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]} was sent to particle device with access token {accesstoken}'})
+    return 'Data successfully sent to particle device',200
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/register')
-def register():
-    user = request.args.get('user')
-    token = request.args.get('token')
-    eventname = request.args.get('eventname')
-    if user and token and eventname:
-        tokens[user] = {'token': token , 'eventname': eventname}
-        return render_template('successful.html', user=user, token=token, eventname=eventname),200
-    return ({"error": "Invalid form data"}), 400
-
-@app.route('/register',methods=['POST'])
-def registerPost():
-    user = request.form.get('user')
-    token = request.form.get('token')
-    eventname = request.form.get('eventname')
-    if user and token and eventname:
-        tokens[user] = {'token': token , 'eventname': eventname}
-        return render_template('successful.html', user=user, token=token, eventname=eventname),200
-    return ({"error": "Invalid form data"}), 400
 
 @app.route('/debug')
 def debug():
-    if tokens:
-        return render_template('debug.html', tokens = tokens),200
-    return ({"error": "Invalid form data"}), 400
+    if logs:
+        return render_template('debug.html', logs = logs),200
+    return ("Oops ! No logs to display"), 200
   
 if __name__ == '__main__':
     app.run()

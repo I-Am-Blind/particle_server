@@ -10,22 +10,63 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="font-inter flex items-center justify-center min-h-screen bg-white">
-    <div class="text-center">
+<body class="font-inter flex  justify-center min-h-screen bg-white">
+    <div class="m-4">
         <table class="min-w-full bg-white border border-gray-300 shadow-lg rounded-md overflow-hidden">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 bg-gray-100 border-b">Telegram User ID</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Success</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Telegram Bot ID</th>
                     <th class="py-2 px-4 bg-gray-100 border-b">Event Name</th>
-                    <th class="py-2 px-4 bg-gray-100 border-b">Particle Argon Access Token</th>
+                    <th class="py-2 px-4 bg-gray-100 border-b">Log</th>
                 </tr>
             </thead>
             <tbody>
-                {% for userId, data in tokens.items() %}
+                {% for  data in logs %}
                     <tr>
-                        <td class="py-2 px-4 border-b">{{ userId }}</td>
-                        <td class="py-2 px-4 border-b">{{ data.eventname }}</td>
-                        <td class="py-2 px-4 border-b">{{ data.token }}</td>
+                        <td class="py-2 px-4 border-b
+                            {% if data.success == 'none' %}
+                                text-gray-500
+                            {% elif data.success == 'true' %}
+                                text-green-500
+                            {% elif data.success == 'false' %}
+                                text-red-700
+                            {% endif %}
+                        ">
+                            {{ data.success }}
+                        </td>
+                        
+                        <td class="py-2 px-4 border-b
+                            {% if data.success == 'none' %}
+                                text-gray-500
+                            {% elif data.success == 'true' %}
+                                text-green-500
+                            {% elif data.success == 'false' %}
+                                text-red-700
+                            {% endif %}
+                        ">
+                            {{ data.botid }}
+                        </td>
+                        <td class="py-2 px-4 border-b
+                            {% if data.success == 'none' %}
+                                text-gray-500
+                            {% elif data.success == 'true' %}
+                                text-green-500
+                            {% elif data.success == 'false' %}
+                                text-red-700
+                            {% endif %}
+                        ">
+                            {{ data.eventname }}
+                        </td>
+                        <td class="py-2 px-4 border-b
+                        {% if data.success == 'none' %}
+                            text-gray-500
+                        {% elif data.success == 'true' %}
+                            text-green-500
+                        {% elif data.success == 'false' %}
+                            text-red-700
+                        {% endif %}
+                    ">{{ data.log }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
