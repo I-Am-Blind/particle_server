@@ -77,7 +77,7 @@ def update(botid,accesstoken,eventname):
         logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
         return f'Error in request to particle device', 400
     
-    logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]} was sent to particle device with access token {accesstoken}'})
+    logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}"  was sent to particle device with access token {accesstoken}'})
     return 'Data successfully sent to particle device',200
 
 
