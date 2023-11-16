@@ -20,11 +20,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% set index = 1 %}
                 {% for  data in logs %}
                     <tr>
                         <td class="py-2 px-4 border-b font-bold">
-                            {{ index }}
+                            {{ loop.index }}
                         </td>
                         <td class="py-2 px-4 border-b
                             {% if data.success == 'none' %}
@@ -70,7 +69,6 @@
                         {% endif %}
                     ">{{ data.log }}</td>
                     </tr>
-                    {% set index = index + 1 %}
                 {% endfor %}
             </tbody>
         </table>
