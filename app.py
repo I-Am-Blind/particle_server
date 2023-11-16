@@ -47,9 +47,9 @@ def registerPost():
            if response.status_code == 200:
                all_data[bot_id] = {'bot_id': bot_id ,'access_token':response_data.get('access_token'),'event_name':eventname , 'team_name': team_name}
                return render_template('successful.html', data=all_data[bot_id])
-           return render_template('error.html',error = "Telegram Bot setWebhook API Error!" ,sub = f"Please verify Telegram Bot ID : {bot_id}")
-        return render_template('error.html',error = "Particle AuthToken Generation error!" , sub = f"Please verify the following :<br>Client ID : {client_id}<br>Client Secret : {client_secret}")       
-    return render_template('error.html',error = "Invalid Entries! Please try again" , sub = "")     
+           return render_template('error.html',error = "Telegram Bot setWebhook API Error!" ,sub = f"Please verify Telegram Bot ID : {bot_id}"),200
+        return render_template('error.html',error = "Particle AuthToken Generation error!" , sub = f"Please verify the following :<br>Client ID : {client_id}<br>Client Secret : {client_secret}"),200       
+    return render_template('error.html',error = "Invalid Entries! Please try again" , sub = ""),200     
 
     
 @app.route('/<botid>/<accesstoken>/<eventname>',methods=['POST'])
@@ -81,17 +81,25 @@ def update(botid,accesstoken,eventname):
     return 'Data successfully sent to particle device',200
 
 
+@app.route('/deleteWebhook/<botid>')
+def deleteWebhoo(botid):
+    if botid in all_data:
+        del all_data[botid]
+    url = f"https://api.telegram.org/bot{botid}/deleteWebhook"
+    response = requests.request("POST", url, headers={}, data={})
+    return render_template('error.html',error = response.json()['description'] ,sub = response.status_code )
+
 @app.route('/debug/logs')
 def debug():
     if logs:
         return render_template('debug.html', logs = logs),200
-    return ("Oops ! No logs to display"), 200
+    return render_template('error.html',error = "Oops ! No Logs yet " , sub = "" ),200
 
 @app.route('/debug/admin')
 def admin():
     if all_data:
         return render_template('admin.html', data = all_data),200
-    return ("Oops ! No registrations yet "), 200
+    return render_template('error.html',error = "Oops ! No Registrations yet " , sub = ""),200
 
 if __name__ == '__main__':
     app.run()
