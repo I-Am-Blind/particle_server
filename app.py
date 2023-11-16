@@ -55,8 +55,8 @@ def registerPost():
 @app.route('/<botid>/<accesstoken>/<eventname>',methods=['POST'])
 def update(botid,accesstoken,eventname):
     data = request.get_json()
-    if data:
-        logs.append({'success': 'none' ,'team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname, 'log' : f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]}'})
+    #if data:
+        #logs.append({'success': 'none' ,'team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname, 'log' : f'Message "{data["message"]["text"]}" from {data["message"]["from"]["username"]}'})
     if data['message']['from']['is_bot']:
         return "ok",200
     url = f"https://api.particle.io/v1/devices/events?access_token={accesstoken}"
@@ -71,13 +71,13 @@ def update(botid,accesstoken,eventname):
     try:
         response = requests.request("POST", url, headers=headers, data=payload)
         if response.status_code != 200:
-            logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
+            #logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
             return "Invalid access token",400
     except Exception as error:
-        logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
+        #logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
         return f'Error in request to particle device', 400
     
-    logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}"  was sent to particle device with access token {accesstoken}'})
+    #logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}"  was sent to particle device with access token {accesstoken}'})
     return 'Data successfully sent to particle device',200
 
 
