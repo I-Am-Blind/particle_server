@@ -42,7 +42,7 @@ def registerPost():
         response = requests.request("POST", auth_url, headers=headers, data=payload)
         response_data = response.json()
         if response.status_code == 200:
-           webhook_url = f"https://api.telegram.org/bot{bot_id}/setWebhook?url=https://particle-api-d8i53.ondigitalocean.app/{bot_id}/{response_data.get('access_token')}/{eventname}"
+           webhook_url = f"https://api.telegram.org/bot{bot_id}/setWebhook?url=https://particle-api-d8i53.ondigitalocean.app/{bot_id}/{response_data.get('access_token')}/{eventname}/{team_name}"
            response = requests.request("POST", webhook_url, headers={}, data={})
            if response.status_code == 200:
                all_data[bot_id] = {'bot_id': bot_id ,'access_token':response_data.get('access_token'),'event_name':eventname , 'team_name': team_name}
@@ -52,11 +52,11 @@ def registerPost():
     return render_template('error.html',error = "Invalid Entries! Please try again" , sub = ""),200     
 
     
-@app.route('/<botid>/<accesstoken>/<eventname>',methods=['POST'])
-def update(botid,accesstoken,eventname):
+@app.route('/<botid>/<accesstoken>/<eventname>/<teamname>',methods=['POST'])
+def update(botid,accesstoken,eventname,teamname):
     data = request.get_json()
-    #if data:
-        #logs.append({'success': 'none' ,'team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname, 'log' : f'Message : "{data["message"]["text"]}"'})
+    if not data:
+        logs.append({'success': 'false' ,'team_name' : teamname ,'botid': botid ,'eventname': eventname, 'log' : f'No data recieved from telegram webhook'})
     if data['message']['from']['is_bot']:
         return "ok",200
     url = f"https://api.particle.io/v1/devices/events?access_token={accesstoken}"
@@ -71,13 +71,13 @@ def update(botid,accesstoken,eventname):
     try:
         response = requests.request("POST", url, headers=headers, data=payload)
         if response.status_code != 200:
-            #logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
+            logs.append({'success' : 'false','team_name' : teamname , 'botid': botid ,'eventname': eventname , 'log' : f'Invalid Access token : {accesstoken}'})
             return "Invalid access token",400
     except Exception as error:
-        #logs.append({'success' : 'false','team_name' : all_data[botid]['team_name'] , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
+        logs.append({'success' : 'false','team_name' : teamname , 'botid': botid ,'eventname': eventname  , 'log' : 'Server Error ! Flask app was unable to send request to particle device'})
         return f'Error in request to particle device', 400
     
-    #logs.append({'success':'true','team_name' : all_data[botid]['team_name'] ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}"  was sent to particle device with access token {accesstoken}'})
+    logs.append({'success':'true','team_name' : teamname ,'botid': botid ,'eventname': eventname , 'log': f'Message "{data["message"]["text"]}"  was sent to particle device with access token {accesstoken}'})
     return 'Data successfully sent to particle device',200
 
 
