@@ -1,6 +1,6 @@
 import requests 
 from loguru import logger 
-from flask import Flask, request, json ,render_template
+from flask import Flask, request, json ,render_template ,redirect
 from flask_cors import CORS
 from config import logs,all_data
 from flask_talisman import Talisman
@@ -57,6 +57,7 @@ def update(botid,accesstoken,eventname,teamname):
     data = request.get_json()
     if not data:
         logs.append({'success': 'false' ,'team_name' : teamname ,'botid': botid ,'eventname': eventname, 'log' : f'No data recieved from telegram webhook'})
+        return "Error" ,400
     if data['message']['from']['is_bot']:
         return "ok",200
     url = f"https://api.particle.io/v1/devices/events?access_token={accesstoken}"
@@ -100,6 +101,11 @@ def admin():
     if all_data:
         return render_template('admin.html', data = all_data),200
     return render_template('error.html',error = "Oops ! No Registrations yet " , sub = ""),200
+
+@app.route('/debug/delete/logs')
+def delete():
+    logs.clear()
+    return redirect('/debug/logs')
 
 if __name__ == '__main__':
     app.run()
