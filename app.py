@@ -55,6 +55,7 @@ def registerPost():
 @app.route('/<botid>/<accesstoken>/<eventname>/<teamname>',methods=['POST'])
 def update(botid,accesstoken,eventname,teamname):
     data = request.get_json()
+    logger.debug(f"Received data: {data}")
     if not data:
         logs.append({'success': 'false' ,'team_name' : teamname ,'botid': botid ,'eventname': eventname, 'log' : f'No data recieved from telegram webhook'})
         return "Error" ,400
