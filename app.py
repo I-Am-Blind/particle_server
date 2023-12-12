@@ -42,7 +42,7 @@ def registerPost():
         response = requests.request("POST", auth_url, headers=headers, data=payload)
         response_data = response.json()
         if response.status_code == 200:
-           webhook_url = f"https://api.telegram.org/bot{bot_id}/setWebhook?url=https://particle-api-d8i53.ondigitalocean.app/{bot_id}/{response_data.get('access_token')}/{eventname}/{team_name}"
+           webhook_url = f"https://api.telegram.org/bot{bot_id}/setWebhook?url=https://lionfish-app-2qblj.ondigitalocean.app/{bot_id}/{response_data.get('access_token')}/{eventname}/{team_name}"
            response = requests.request("POST", webhook_url, headers={}, data={})
            if response.status_code == 200:
                all_data[bot_id] = {'bot_id': bot_id ,'access_token':response_data.get('access_token'),'event_name':eventname , 'team_name': team_name}
